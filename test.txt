@@ -1,0 +1,11 @@
+GET /api/users => get all the users
+GET /users => get all the users in a HTML document
+
+POST /api/users => create new users
+
+GET /api/users/1 => get a particular user width id = 1
+GET /api/users/2 => get a particular user width id = 2
+
+PATCH /api/users/1 => update a particular user with id 1
+
+DELETE /api/users/1 => Delete a particular user with id 1
