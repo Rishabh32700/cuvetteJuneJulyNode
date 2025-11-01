@@ -36,7 +36,7 @@ async function handleCreateNewUser(req, res) {
   console.log("data => ", body);
   if (!body.first_name || !body.email || !body.gender) {
     return res
-      .status(400)
+      .status(200)
       .json({ status: 400, message: "some required fields are missing !!!" });
   }
   const userEntry = await Users.create({
@@ -47,7 +47,7 @@ async function handleCreateNewUser(req, res) {
   });
 
   return res.status(200).json({
-    status: 200,
+    status: 201,
     message: "user craeted successfully !!!",
     userEntry: userEntry,
   });

@@ -1,3 +1,5 @@
+const jwt = require("jsonwebtoken");
+
 const malfunction = false;
 
 function checkMalfunction() {
@@ -11,20 +13,21 @@ function checkMalfunction() {
   };
 }
 
-function authenticateUser() {
-  return (req, res, next) => {
-    console.log("middleware 2 called !!!");
-    if (
-      req.headers.authorization &&
-      req.headers.authorization ===
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTc1Nzk1ODMxODU5Miwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzU3OTU4MzI3LCJleHAiOjE3NTc5NjE5Mjd9.EIdQK_aOCGY9aPgC6O5YhiveLpp-sFsLkzVkBM-VVvs"
-    ) {
-      req.headers.hello = "hieee";
-      next();
-    } else {
-      res.send("user not logged in !!!");
-    }
-  };
+function authenticateUser(req, res, next) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startswith("Bearer ")) {
+    return res
+      .status(200)
+      .json({ status: 401, message: "Missing or invalid token" });
+  }
+
+  const token = authHeader.split(" ")[1];
+  jwt.verify(token, "SECRET_KEY", (err, decoded) => {
+    if (err)
+      return res.status(200).json({ status: 403, message: "invalid request" });
+    req.user = decoded;
+    next();
+  });
 }
 
 module.exports = {

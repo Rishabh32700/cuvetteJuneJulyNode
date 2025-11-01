@@ -5,6 +5,7 @@ const app = express();
 const cors = require("cors");
 
 const userRouter = require("./routes/user");
+const authRouter = require("./routes/auth");
 const { checkMalfunction, authenticateUser } = require("./middleware/index");
 
 // connection
@@ -15,10 +16,11 @@ app.use(cors());
 // middlewares
 app.use(express.urlencoded({ extended: false })); // middleWare
 app.use(checkMalfunction())
-app.use(authenticateUser())
+
 
 // routes
-app.use("/api/users", userRouter);
+app.use("/api/users",authenticateUser , userRouter);
+app.use("/api/auth", authRouter);
 
 app.listen(8000, () => {
   console.log("server started !!!");
